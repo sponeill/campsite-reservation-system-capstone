@@ -17,6 +17,10 @@ namespace Capstone
             //     <add name="CapstoneDatabase" connectionString=""/>
             // The actual connection string for the database is found connectionString attribute.            
             string connectionString = ConfigurationManager.ConnectionStrings["CapstoneDatabase"].ConnectionString;
+
+            ParkSystemCLI cli = new ParkSystemCLI();
+
+            cli.RunCLI();
         }
     }
 }
