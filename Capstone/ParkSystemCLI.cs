@@ -60,6 +60,8 @@ namespace Capstone
                     arrivalDate = Convert.ToDateTime(Console.ReadLine());
                     Console.WriteLine("What is the departure date? ");
                     departureDate = Convert.ToDateTime(Console.ReadLine());
+
+					PrintReservations(parks[int.Parse(userInput) - 1].ParkId, campgroundInput, arrivalDate, departureDate);
                     break;
             }
             
@@ -69,10 +71,19 @@ namespace Capstone
 
 
 
-        public List<Reservation> PrintReservations()
+        public List<AvailableReservations> PrintReservations(int parkId, int campgroundId, DateTime startDate, DateTime endDate)
         {
             ReservationDAL dal = new ReservationDAL();
-            List<Reservation> reservations = 
+			List<AvailableReservations> reservations = dal.GetAllReservations(parkId, campgroundId, startDate, endDate);
+
+			Console.WriteLine("Results Matching Your Search Criteria");
+			Console.WriteLine("Site No. \t Max Occup. \t Accessible? \t Max RV Length \t Utility \t Cost");
+			foreach (AvailableReservations reservation in reservations)
+			{
+				Console.WriteLine($"{reservation.SiteNumber} \t {reservation.MaxOccupancy} \t {reservation.Accessible}	\t {reservation.MaxRvLenth} \t {reservation.Utilities} \t {reservation.Cost.ToString("C")}");
+			}
+
+			return reservations;
         }
 
 		public List<Campground> PrintAllCampgrounds(int parkId)
