@@ -21,5 +21,7 @@ namespace Capstone.Models
         public int AnnualVisitorCount { get; set; }
 
         public string Description { get; set; }
+
+		public List<Campground> campgrounds { get; set; }
     }
 }

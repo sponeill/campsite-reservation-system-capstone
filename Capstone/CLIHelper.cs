@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectDB
+namespace Capstone
 {
     public class CLIHelper
     {
@@ -99,7 +99,7 @@ namespace ProjectDB
             return boolValue;
         }
 
-        public static string GetString(string message)
+        public string GetString(string message)
         {
             string userInput = String.Empty;
             int numberOfAttempts = 0;
