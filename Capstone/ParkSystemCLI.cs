@@ -18,10 +18,14 @@ namespace Capstone
         public void RunCLI()
 		{
 			string userInput = "";
+            string subMenuInput = "";
 			Console.WriteLine("Welcome to the National Park System Reservation System!");
 			List<Park> parks = PrintAllParks();
 			Console.WriteLine("Please enter the number of the park you would like to visit.");
 			userInput = Console.ReadLine().ToString();
+            int campgroundInput;
+            DateTime arrivalDate;
+            DateTime departureDate;
 
 			while ((int.Parse(userInput) < 1 || int.Parse(userInput) > parks.Count))
 			{
@@ -42,24 +46,55 @@ namespace Capstone
 
 			PrintParkDetails(parks[int.Parse(userInput) - 1]);
 
-			userInput = PrintCampgroundMenu();
-			
-
+			subMenuInput = PrintCampgroundMenu();
+            switch (subMenuInput)
+            {
+                case "1":
+                    List<Campground> campgrounds = PrintAllCampgrounds(parks[int.Parse(userInput) - 1].ParkId);
+                    break;
+                case "2":
+                    campgrounds = PrintAllCampgrounds(parks[int.Parse(userInput) - 1].ParkId);
+                    Console.WriteLine("Which campground (enter 0 to cancel)? ");
+                    campgroundInput = int.Parse(Console.ReadLine());
+                    Console.WriteLine("What is the arrival date? ");
+                    arrivalDate = Convert.ToDateTime(Console.ReadLine());
+                    Console.WriteLine("What is the departure date? ");
+                    departureDate = Convert.ToDateTime(Console.ReadLine());
+                    break;
+            }
+            
 
 
 		}
 
-		public List<Campground> ViewCampgrounds()
+
+
+        public List<Reservation> PrintReservations()
+        {
+            ReservationDAL dal = new ReservationDAL();
+            List<Reservation> reservations = 
+        }
+
+		public List<Campground> PrintAllCampgrounds(int parkId)
 		{
-
-
-		}
+            CampgroundDAL dal = new CampgroundDAL();
+            List<Campground> campgrounds = dal.GetAllCampgrounds(parkId);
+            int counter = 1;
+            Console.WriteLine("\t Name \t Open \t Close \t Daily Fee");
+            foreach (Campground campground in campgrounds)
+            {
+                Console.WriteLine($"#{counter}\t {campground.Name} \t {campground.OpeningMonth} \t {campground.ClosingMonth} \t {campground.DailyFee.ToString("C")}");
+                counter++;
+            }
+            Console.WriteLine("Q) Quit Program");
+            return campgrounds;
+        }
 
 		public string PrintCampgroundMenu()
 		{
 			Console.WriteLine();
 			Console.WriteLine("Select a Command");
-			Console.WriteLine("1) View Campground");
+			Console.WriteLine("1) View Campgrounds");
 			Console.WriteLine("2) Search for Reservation");
 			Console.WriteLine("3) Return to Previous Screen");
 			string userInput = Console.ReadLine();

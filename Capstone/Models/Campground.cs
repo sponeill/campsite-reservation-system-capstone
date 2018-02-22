@@ -14,6 +14,6 @@ namespace Capstone.Models
 		public int OpeningMonth { get; set; } 
 		public int ClosingMonth { get; set; }
 		public decimal DailyFee { get; set; }
-
+        public List<Reservation> Reservations { get; set; }
 	}
 }

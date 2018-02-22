@@ -9,20 +9,21 @@ using System.Threading.Tasks;
 
 namespace Capstone.DAL
 {
-	public class CampgroundDAL
-	{
+    public class ReservationDAL
+    {
         string connectionString = ConfigurationManager.ConnectionStrings["CapstoneDatabase"].ConnectionString;
 
-        public List<Campground> GetAllCampgrounds(int parkId)
+        public List<Reservation> GetAllReservations()
         {
-            List<Campground> campgrounds = new List<Campground>();
+            List<Reservation> reservations = new List<Reservation>();
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM campground WHERE park_id = @parkId ORDER BY name;", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM reservation" +
+                                                    "", conn);
                     cmd.Parameters.AddWithValue("@parkId", parkId);
 
                     SqlDataReader reader = cmd.ExecuteReader();
