@@ -20,7 +20,9 @@ namespace Capstone
             string userInput = "";
             string subMenuInput = "";
 
+			Console.WriteLine();
             List<Park> parks = PrintAllParks();
+			Console.WriteLine();
             Console.WriteLine("Please enter the number of the park you would like to visit.");
             userInput = Console.ReadLine().ToString();
             int campgroundInput;
@@ -35,7 +37,7 @@ namespace Capstone
 
             if (int.Parse(userInput) == 0)
             {
-                return;
+				Environment.Exit(0);
             }
 
             PrintParkDetails(parks[int.Parse(userInput) - 1]);
@@ -77,8 +79,10 @@ namespace Capstone
                                 subMenuInput = "0";
                                 break;
                             }
+							Console.WriteLine();
                             Console.WriteLine("What is the arrival date? ");
                             arrivalDate = Convert.ToDateTime(Console.ReadLine());
+							Console.WriteLine();
                             Console.WriteLine("What is the departure date? ");
                             departureDate = Convert.ToDateTime(Console.ReadLine());
                             reservationsAvailable = PrintReservations(parks[int.Parse(userInput) - 1].ParkId, campgroundInput, arrivalDate, departureDate);
@@ -104,15 +108,29 @@ namespace Capstone
             List<AvailableReservations> reservations = dal.GetAllReservations(parkId, campgroundId, startDate, endDate);
             if (reservations.Count == 0)
             {
-                Console.WriteLine("No reservations are available. Please make another selection.\n");
-                return false;
+				Console.WriteLine();
+                Console.WriteLine("No reservations are available. Please make a selection:");
+				Console.WriteLine("1) Enter new dates");
+				Console.WriteLine("2) Return to Main Menu");
+				string submenuInput = Console.ReadLine();
+
+				if (submenuInput == "1")
+				{
+					return false;
+				}
+				else
+				{
+					RunCLI();
+				}
             }
+			Console.Clear();
             Console.WriteLine("Results Matching Your Search Criteria");
-            Console.WriteLine("Site No. \t Max Occup. \t Accessible? \t Max RV Length \t Utility \t Cost");
+			Console.WriteLine();
+            Console.WriteLine("Site No.".PadRight(10) + "Max Occup.".PadRight(12) + "Accessible?".PadRight(15) + "Max RV Length".PadRight(15) + "Utilities?".PadRight(15) + "Total Cost");
             foreach (AvailableReservations reservation in reservations)
             {
-                Console.WriteLine($"{reservation.SiteNumber}".PadRight(10) + $"{reservation.MaxOccupancy}".PadRight(10) + $"{reservation.Accessible}".PadRight(5)
-                    + $"{reservation.MaxRvLenth}".PadRight(5) + $"{reservation.Utilities}".PadRight(5) + $"{(reservation.Cost * (decimal)((endDate - startDate).TotalDays)).ToString("C")}");
+                Console.WriteLine($"{reservation.SiteNumber}".PadRight(10) + $"{reservation.MaxOccupancy}".PadRight(12) + $"{reservation.Accessible}".PadRight(15)
+                    + $"{reservation.MaxRvLenth}".PadRight(15) + $"{reservation.Utilities}".PadRight(15) + $"{(reservation.Cost * (decimal)((endDate - startDate).TotalDays)).ToString("C")}");
             }
             return true;
         }
@@ -121,33 +139,38 @@ namespace Capstone
         {
             int siteToReserve;
             string reservationName = "";
-            Console.WriteLine("Which site should be reserved (enter 0 to cancel)?");
+			Console.WriteLine();
+            Console.WriteLine("Which site would you like to reserve (enter 0 to cancel)?");
             siteToReserve = Convert.ToInt32(Console.ReadLine());
+			Console.WriteLine();
             Console.WriteLine("What name should the reservation be made under?");
             reservationName = Console.ReadLine();
             ReservationDAL dal = new ReservationDAL();
             int confirmationId = dal.Reserve(siteToReserve, reservationName, startDate, endDate);
-
+			Console.WriteLine();
             Console.WriteLine("The reservation has been made and the confirmation id is " + confirmationId);
             Console.WriteLine();
         }
 
         public List<Campground> PrintAllCampgrounds(int parkId)
         {
+			Console.Clear();
             CampgroundDAL dal = new CampgroundDAL();
             List<Campground> campgrounds = dal.GetAllCampgrounds(parkId);
             int counter = 1;
-            Console.WriteLine("\t Name \t Open \t Close \t Daily Fee");
+            Console.WriteLine("ID".PadRight(6) + "Name".PadRight(35) + "Open".PadRight(15) + "Close".PadRight(15) + "Daily Fee".PadRight(15));
             foreach (Campground campground in campgrounds)
             {
-                Console.WriteLine($"#{campground.CampgroundId}\t {campground.Name} \t {campground.OpeningMonth} \t {campground.ClosingMonth} \t {campground.DailyFee.ToString("C")}");
+				Console.WriteLine("#" + campground.CampgroundId.ToString().PadRight(5) + campground.Name.PadRight(35) + campground.OpeningMonth.ToString().PadRight(15) + campground.ClosingMonth.ToString().PadRight(15) + campground.DailyFee.ToString("C").PadRight(15));
                 counter++;
             }
+			Console.WriteLine();
             return campgrounds;
         }
 
         public string PrintCampgroundMenu()
         {
+			
             Console.WriteLine();
             Console.WriteLine("Select a Command");
             Console.WriteLine("1) View Campgrounds");
@@ -159,11 +182,12 @@ namespace Capstone
 
         public void PrintParkDetails(Park park)
         {
-            Console.WriteLine(park.Name);
-            Console.WriteLine($"Location:     {park.Location}");
-            Console.WriteLine($"Established:     {park.EstablishedDate}");
-            Console.WriteLine($"Area:     {park.Area}");
-            Console.WriteLine($"Annual Visitors:     {park.AnnualVisitorCount}");
+			Console.Clear();
+            Console.WriteLine("Name:".PadRight(25) + park.Name);
+            Console.WriteLine("Location:".PadRight(25) +  park.Location);
+            Console.WriteLine("Established:".PadRight(25) + park.EstablishedDate);
+            Console.WriteLine("Area:".PadRight(25) + park.Area);
+            Console.WriteLine("Annual Visitors:".PadRight(25) + park.AnnualVisitorCount);
             Console.WriteLine();
             Console.WriteLine(park.Description);
         }
