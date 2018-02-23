@@ -63,6 +63,8 @@ namespace Capstone.DAL
             }
             return reservations;
         }
+
+
         public int Reserve(int siteId, string name, DateTime startDate, DateTime endDate)
         {
             int confirmationId = 0;
@@ -96,10 +98,43 @@ namespace Capstone.DAL
             }
             catch (SqlException ex)
             {
-                Console.WriteLine("An error happened making reservation.");
+                Console.WriteLine("An error happened making reservation." + ex.Message);
             }
 
             return confirmationId;
         }
+
+		public List<Reservation> SearchReservations()
+		{
+			List<Reservation> reservations = new List<Reservation>();
+
+			try
+			{
+				using (SqlConnection conn = new SqlConnection(connectionString))
+				{
+					conn.Open();
+					SqlCommand cmd = new SqlCommand("SELECT * FROM reservation", conn);
+					SqlDataReader reader = cmd.ExecuteReader();
+					while(reader.Read())
+					{
+						Reservation reservation = new Reservation();
+						reservation.CreateDate = Convert.ToDateTime(reader["create_date"]);
+						reservation.FromDate = Convert.ToDateTime(reader["from_date"]);
+						reservation.Name = Convert.ToString(reader["name"]);
+						reservation.ReservationId = Convert.ToInt32(reader["reservation_id"]);
+						reservation.SiteId = Convert.ToInt32(reader["site_id"]);
+						reservation.ToDate = Convert.ToDateTime(reader["to_date"]);
+						reservations.Add(reservation);
+					}
+
+				}
+			}
+			catch(SqlException ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+
+			return reservations;
+		}
     }
 }
