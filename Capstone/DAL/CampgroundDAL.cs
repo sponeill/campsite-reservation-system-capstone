@@ -22,7 +22,7 @@ namespace Capstone.DAL
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM campground WHERE park_id = @parkId ORDER BY name;", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM campground WHERE park_id = @parkId ORDER BY campground_id;", conn);
                     cmd.Parameters.AddWithValue("@parkId", parkId);
 
                     SqlDataReader reader = cmd.ExecuteReader();

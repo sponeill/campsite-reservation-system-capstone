@@ -19,7 +19,7 @@ namespace Capstone
             string connectionString = ConfigurationManager.ConnectionStrings["CapstoneDatabase"].ConnectionString;
 
             ParkSystemCLI cli = new ParkSystemCLI();
-
+            Console.WriteLine("Welcome to the National Park System Reservation System!");
             cli.RunCLI();
         }
     }

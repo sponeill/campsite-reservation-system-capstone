@@ -22,11 +22,16 @@ namespace Capstone.DAL
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee" +
-                        " FROM park JOIN campground ON park.park_id = campground.park_id JOIN site ON campground.campground_id = site.campground_id JOIN reservation ON " +
-                        " site.site_id = reservation.site_id WHERE campground.campground_id = @campgroundId AND (@startDate <= reservation.from_date OR " +
-                        " @startDate >= reservation.to_date) AND (@endDate <= reservation.from_date OR @endDate >= reservation.to_date) AND (MONTH(@startDate)) >= campground.open_from_mm AND" +
-                        " (MONTH(@endDate)) <= campground.open_to_mm;", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT TOP 5 site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee FROM campground "
+                    +"LEFT JOIN site ON campground.campground_id = site.campground_id "
+                    +"WHERE site.site_id NOT IN(SELECT reservation.site_id FROM reservation "
+                    +"WHERE(@startDate >= reservation.from_date OR @startDate <= reservation.to_date) "
+                    +"AND(@endDate >= reservation.from_date OR @endDate <= reservation.to_date) "
+                    +"AND(reservation.from_date >= @startDate) "
+                    +"AND(reservation.to_date <= @endDate)) "
+                    +"AND(MONTH(@startDate) >= campground.open_from_mm AND(MONTH(@startDate)) <= campground.open_to_mm) "
+                    +"AND((MONTH(@endDate)) >= campground.open_from_mm AND(MONTH(@endDate)) <= campground.open_to_mm) "
+                    +"AND campground.campground_id = @campgroundId", conn);
 
                     cmd.Parameters.AddWithValue("@campgroundId", campgroundId);
                     cmd.Parameters.AddWithValue("@startDate", startDate.Date);
