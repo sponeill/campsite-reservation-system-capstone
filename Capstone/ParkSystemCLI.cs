@@ -27,19 +27,13 @@ namespace Capstone
             DateTime arrivalDate;
             DateTime departureDate;
 
-            while ((int.Parse(userInput) < 1 || int.Parse(userInput) > parks.Count))
+            while ((int.Parse(userInput) < 0 || int.Parse(userInput) > parks.Count))
             {
                 Console.WriteLine("Invalid input. Please try again.");
                 userInput = Console.ReadLine();
             }
 
-            //while(userInput.ToLower() != "q")
-            //{
-            //	Console.WriteLine("Invalid input. Please try again.");
-            //	userInput = Console.ReadLine();
-            //}
-
-            if (userInput == "q")
+            if (int.Parse(userInput) == 0)
             {
                 return;
             }
@@ -184,7 +178,7 @@ namespace Capstone
                 Console.WriteLine(counter + ")" + " " + park.Name);
                 counter++;
             }
-            Console.WriteLine("Q) Quit Program");
+            Console.WriteLine("0) Quit Program");
             return parks;
 
         }
