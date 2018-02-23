@@ -236,5 +236,12 @@ ALTER TABLE reservation ADD FOREIGN KEY (site_id) REFERENCES site(site_id);
   GROUP BY site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee
 
 
-
+  SELECT DISTINCT site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee 
+  FROM campground
+  LEFT JOIN site ON campground.campground_id = site.campground_id
+  LEFT JOIN reservation ON site.site_id = reservation.site_id
+  WHERE site.site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE ('2018-6-16' >= reservation.from_date AND '2018-6-23' <= reservation.to_date))
+  AND (MONTH('2018-6-16') >= campground.open_from_mm AND (MONTH('2018-6-16')) <= campground.open_to_mm)
+  AND ((MONTH('2018-6-23')) >= campground.open_from_mm AND (MONTH('2018-6-23')) <= campground.open_to_mm)
+  AND campground.campground_id = 6
  
