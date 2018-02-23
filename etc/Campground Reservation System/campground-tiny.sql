@@ -225,23 +225,11 @@ ALTER TABLE reservation ADD FOREIGN KEY (site_id) REFERENCES site(site_id);
 
   SELECT site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee 
   FROM park
-  LEFT JOIN campground ON park.park_id = campground.park_id
-  LEFT JOIN site ON campground.campground_id = site.campground_id
-  LEFT JOIN reservation ON site.site_id =  reservation.site_id
+  JOIN campground ON park.park_id = campground.park_id
+  JOIN site ON campground.campground_id = site.campground_id
+  JOIN reservation ON site.site_id =  reservation.site_id
   WHERE campground.campground_id = 6
-  AND ('2018-2-16' <= reservation.from_date OR '2018-2-16' >= reservation.to_date)
-  AND ('2018-2-23' <= reservation.from_date OR '2018-2-23' >= reservation.to_date)
-  AND (MONTH('2018-2-16')) >= campground.open_from_mm AND (MONTH('2018-2-16')) <= campground.open_to_mm
-  AND (MONTH('2018-2-23')) >= campground.open_from_mm AND (MONTH('2018-2-23')) <= campground.open_to_mm
-  GROUP BY site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee
-
-
-  SELECT DISTINCT site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee 
-  FROM campground
-  LEFT JOIN site ON campground.campground_id = site.campground_id
-  LEFT JOIN reservation ON site.site_id = reservation.site_id
-  WHERE site.site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE ('2018-6-16' >= reservation.from_date AND '2018-6-23' <= reservation.to_date))
-  AND (MONTH('2018-6-16') >= campground.open_from_mm AND (MONTH('2018-6-16')) <= campground.open_to_mm)
-  AND ((MONTH('2018-6-23')) >= campground.open_from_mm AND (MONTH('2018-6-23')) <= campground.open_to_mm)
-  AND campground.campground_id = 6
- 
+  AND ('2018-06-22' >= reservation.from_date OR '2018-06-22' <= reservation.to_date)
+  AND ('2018-06-23' >= reservation.to_date OR '2018-06-23' <= reservation.to_date)
+  AND ((MONTH('2018-06-22')) >= campground.open_from_mm OR MONTH('2018-06-22') <= campground.open_to_mm)
+  AND ((MONTH('2018-06-23')) >= campground.open_from_mm OR MONTH('2018-06-23') <= campground.open_to_mm)
