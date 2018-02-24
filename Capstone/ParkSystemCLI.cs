@@ -127,10 +127,10 @@ namespace Capstone
             Console.WriteLine("Results Matching Your Search Criteria");
 			Console.WriteLine();
             Console.WriteLine("Site No.".PadRight(10) + "Max Occup.".PadRight(12) + "Accessible?".PadRight(15) + "Max RV Length".PadRight(15) + "Utilities?".PadRight(15) + "Total Cost");
-            foreach (AvailableReservations reservation in reservations)
+            for (int i = 0; i < 5 && i < reservations.Count; i++)
             {
-                Console.WriteLine($"{reservation.SiteNumber}".PadRight(10) + $"{reservation.MaxOccupancy}".PadRight(12) + $"{reservation.Accessible}".PadRight(15)
-                    + $"{reservation.MaxRvLenth}".PadRight(15) + $"{reservation.Utilities}".PadRight(15) + $"{(reservation.Cost * (decimal)((endDate - startDate).TotalDays)).ToString("C")}");
+                Console.WriteLine($"{reservations[i].SiteNumber}".PadRight(10) + $"{reservations[i].MaxOccupancy}".PadRight(12) + $"{reservations[i].Accessible}".PadRight(15)
+                    + $"{reservations[i].MaxRvLenth}".PadRight(15) + $"{reservations[i].Utilities}".PadRight(15) + $"{(reservations[i].Cost * (decimal)((endDate - startDate).TotalDays)).ToString("C")}");
             }
             return true;
         }
