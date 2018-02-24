@@ -26,11 +26,13 @@ namespace Capstone.Tests
             List<Campground> campgrounds1 = testClass.GetAllCampgrounds(1);
             int expectedParkCount2 = GetCampgroundCount(2);
             List<Campground> campgrounds2 = testClass.GetAllCampgrounds(2);
-            
+            int expectedParkCount3 = GetCampgroundCount(3);
+            List<Campground> campgrounds3 = testClass.GetAllCampgrounds(3);
 
             // Assert
             Assert.AreEqual(expectedParkCount1, campgrounds1.Count);
             Assert.AreEqual(expectedParkCount2, campgrounds2.Count);
+            Assert.AreEqual(expectedParkCount3, expectedParkCount3);
 		}
 
 

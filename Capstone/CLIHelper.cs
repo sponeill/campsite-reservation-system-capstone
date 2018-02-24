@@ -8,9 +8,9 @@ namespace Capstone
 {
     public class CLIHelper
     {
-        public static DateTime GetDateTime(string message)
+        public DateTime GetDateTime()
         {
-            string userInput = String.Empty;
+            string userInput = "";
             DateTime dateValue = DateTime.MinValue;
             int numberOfAttempts = 0;
 
@@ -21,7 +21,6 @@ namespace Capstone
                     Console.WriteLine("Invalid date format. Please try again");
                 }
 
-                Console.Write(message + " ");
                 userInput = Console.ReadLine();
                 numberOfAttempts++;
             }
@@ -30,9 +29,9 @@ namespace Capstone
             return dateValue;
         }
 
-        public static int GetInteger(string message)
+        public int GetInteger()
         {
-            string userInput = String.Empty;
+            string userInput = "";
             int intValue = 0;
             int numberOfAttempts = 0;
 
@@ -43,7 +42,6 @@ namespace Capstone
                     Console.WriteLine("Invalid input format. Please try again");
                 }
 
-                Console.Write(message + " ");
                 userInput = Console.ReadLine();
                 numberOfAttempts++;
             }
@@ -99,7 +97,7 @@ namespace Capstone
             return boolValue;
         }
 
-        public string GetString(string message)
+        public string GetString()
         {
             string userInput = String.Empty;
             int numberOfAttempts = 0;
@@ -111,7 +109,6 @@ namespace Capstone
                     Console.WriteLine("Invalid input format. Please try again");
                 }
                 
-                Console.Write(message + " ");
                 userInput = Console.ReadLine();
                 numberOfAttempts++;
             }
