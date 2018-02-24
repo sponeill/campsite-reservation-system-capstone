@@ -22,7 +22,7 @@ namespace Capstone.DAL
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT TOP 5 site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee FROM campground "
+                    SqlCommand cmd = new SqlCommand("SELECT site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee FROM campground "
                     +"LEFT JOIN site ON campground.campground_id = site.campground_id "
                     +"WHERE site.site_id NOT IN(SELECT reservation.site_id FROM reservation "
                     +"WHERE(@startDate >= reservation.from_date OR @startDate <= reservation.to_date) "
