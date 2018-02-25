@@ -100,7 +100,20 @@ namespace Capstone
                             }
                         }
                         break;
-                    case 3:
+					case 3:
+						ReservationDAL reservationDAL = new ReservationDAL();
+						List<Reservation> nextThirty = reservationDAL.ReservationsNextThirtyDays(parks[userInput - 1].ParkId);
+						Console.Clear();
+						Console.WriteLine("ID".PadRight(5) + "Site".PadRight(8) + "Name".PadRight(30) + "Start Date".PadRight(25) + "End Date".PadRight(25) + "Date Reserved");
+						foreach (Reservation reservation in nextThirty)
+						{
+							Console.WriteLine(reservation.ReservationId.ToString().PadRight(5) + reservation.SiteId.ToString().PadRight(8) + reservation.Name.PadRight(30) +
+								reservation.FromDate.ToString().PadRight(25) + reservation.ToDate.ToString().PadRight(25) + reservation.CreateDate.ToString());
+						}
+						Console.WriteLine();
+						subMenuInput = 0;
+						break;
+                    case 4:
                         Console.WriteLine();
                         RunCLI();
                         break;
@@ -191,9 +204,10 @@ namespace Capstone
             Console.WriteLine("Select a Command");
             Console.WriteLine("1) View Campgrounds");
             Console.WriteLine("2) Search for Reservation");
-            Console.WriteLine("3) Return to Previous Screen");
+			Console.WriteLine("3) See Reservations for Next 30 Days");
+			Console.WriteLine("4) Return to Previous Screen");
             int userInput = cliHelper.GetInteger();
-            while(userInput <= 0 && userInput > 3) {
+            while(userInput <= 0 && userInput > 4) {
                 Console.WriteLine("Invalid option. Please try again.");
                 userInput = cliHelper.GetInteger();
             }

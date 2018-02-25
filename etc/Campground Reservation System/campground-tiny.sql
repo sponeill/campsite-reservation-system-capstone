@@ -222,3 +222,9 @@ AND (reservation.to_date <= '2018-3-31'))
 AND (MONTH('2018-1-1') >= campground.open_from_mm AND (MONTH('2018-1-1')) <= campground.open_to_mm)
 AND ((MONTH('2018-3-31')) >= campground.open_from_mm AND (MONTH('2018-3-31')) <= campground.open_to_mm)
 AND campground.campground_id = 1
+
+SELECT * FROM reservation 
+JOIN site ON reservation.site_id = site.site_id
+JOIN campground ON site.campground_id = campground.campground_id
+WHERE campground.park_id = 1
+AND reservation.from_date BETWEEN GETDATE() AND (GETDATE() + 30)

@@ -136,5 +136,45 @@ namespace Capstone.DAL
 
 			return reservations;
 		}
-    }
+
+		public List<Reservation> ReservationsNextThirtyDays(int parkId)
+		{
+			List<Reservation> reservations = new List<Reservation>();
+
+			try
+			{
+				using (SqlConnection conn = new SqlConnection(connectionString))
+				{
+					conn.Open();
+					SqlCommand cmd = new SqlCommand("SELECT * FROM reservation " +
+					"JOIN site ON reservation.site_id = site.site_id " +
+					"JOIN campground ON site.campground_id = campground.campground_id " +
+					"WHERE campground.park_id = @parkId " +
+					"AND reservation.from_date BETWEEN GETDATE() AND(GETDATE() + 30)", conn);
+					cmd.Parameters.AddWithValue("@parkId", parkId);
+
+					SqlDataReader reader = cmd.ExecuteReader();
+					while (reader.Read())
+					{
+						Reservation reservation = new Reservation();
+						reservation.CreateDate = Convert.ToDateTime(reader["create_date"]);
+						reservation.FromDate = Convert.ToDateTime(reader["from_date"]);
+						reservation.Name = Convert.ToString(reader["name"]);
+						reservation.ReservationId = Convert.ToInt32(reader["reservation_id"]);
+						reservation.SiteId = Convert.ToInt32(reader["site_id"]);
+						reservation.ToDate = Convert.ToDateTime(reader["to_date"]);
+						reservations.Add(reservation);
+					}
+
+				}
+			}
+			catch (SqlException ex)
+			{
+				Console.WriteLine(ex.Message);
+				throw;
+			}
+
+			return reservations;
+		}
+	}
 }
