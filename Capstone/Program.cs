@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Media;
+
 
 namespace Capstone
 {
@@ -27,6 +29,10 @@ namespace Capstone
 			Console.WriteLine(@"|  \| |/ _` | __| |/ _ \| '_ \ / _` | | | |_) / _` | '__| |/ / __|");
 			Console.WriteLine(@"| |\  | (_| | |_| | (_) | | | | (_| | | |  __/ (_| | |  |   <\__ \");
 			Console.WriteLine(@"|_| \_|\__,_|\__|_|\___/|_| |_|\__,_|_| |_|   \__,_|_|  |_|\_\___/");
+
+			var mediaPlayer = new System.Media.SoundPlayer();
+			mediaPlayer.SoundLocation = @"C:\Users\Shane O'Neill\c-module-2-capstone-team-0\Capstone\SmokeyTheBear.wav";
+			mediaPlayer.Play();
 
 			cli.RunCLI();
         }
