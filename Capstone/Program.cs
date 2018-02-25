@@ -31,7 +31,7 @@ namespace Capstone
 			Console.WriteLine(@"|_| \_|\__,_|\__|_|\___/|_| |_|\__,_|_| |_|   \__,_|_|  |_|\_\___/");
 
 			var mediaPlayer = new System.Media.SoundPlayer();
-			mediaPlayer.SoundLocation = @"C:\Users\Shane O'Neill\c-module-2-capstone-team-0\Capstone\SmokeyTheBear.wav";
+            mediaPlayer.SoundLocation = Environment.CurrentDirectory + "/SmokeyTheBear.wav";
 			mediaPlayer.Play();
 
 			cli.RunCLI();
