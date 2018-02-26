@@ -75,7 +75,7 @@ namespace Capstone
 
         }
 
-        public static bool GetBool(string message)
+        public bool GetBool()
         {
             string userInput = String.Empty;
             bool boolValue = false;
@@ -87,8 +87,6 @@ namespace Capstone
                 {
                     Console.WriteLine("Invalid input format. Please try again");
                 }
-
-                Console.Write(message + " ");
                 userInput = Console.ReadLine();
                 numberOfAttempts++;
             }

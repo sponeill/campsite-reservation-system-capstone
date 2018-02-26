@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Capstone.DAL;
-
+using System.Globalization;
 
 namespace Capstone
 {
@@ -108,7 +108,7 @@ namespace Capstone
 						foreach (Reservation reservation in nextThirty)
 						{
 							Console.WriteLine(reservation.ReservationId.ToString().PadRight(5) + reservation.SiteId.ToString().PadRight(8) + reservation.Name.PadRight(30) +
-								reservation.FromDate.ToString().PadRight(25) + reservation.ToDate.ToString().PadRight(25) + reservation.CreateDate.ToString());
+								reservation.FromDate.ToString("MMMM").PadRight(25) + reservation.ToDate.ToString("MMMM").PadRight(25) + reservation.CreateDate.ToString());
 						}
 						Console.WriteLine();
 						subMenuInput = 0;
@@ -126,6 +126,7 @@ namespace Capstone
         {
             ReservationDAL dal = new ReservationDAL();
             List<AvailableReservations> reservations = dal.GetAllReservations(parkId, campgroundId, startDate, endDate);
+            reservations = GetAdditionalRequirements(reservations);
             if (reservations.Count == 0)
             {
 				Console.WriteLine();
@@ -155,6 +156,52 @@ namespace Capstone
             {
                 Console.WriteLine($"{reservations[i].SiteNumber}".PadRight(10) + $"{reservations[i].MaxOccupancy}".PadRight(12) + $"{reservations[i].Accessible}".PadRight(15)
                     + $"{reservations[i].MaxRvLenth}".PadRight(15) + $"{reservations[i].Utilities}".PadRight(15) + $"{(reservations[i].Cost * (decimal)((endDate - startDate).TotalDays)).ToString("C")}");
+            }
+            return reservations;
+        }
+
+        private List<AvailableReservations> GetAdditionalRequirements(List<AvailableReservations> reservations)
+        {
+            string needsRequirements = "";
+            Console.WriteLine("Do you have any additional requirements? (Y/N)");
+            needsRequirements = cliHelper.GetString();
+            while(needsRequirements.ToLower() != "y" && needsRequirements.ToLower() != "n")
+            {
+                Console.WriteLine("Invalid option. Please try again.");
+                needsRequirements = cliHelper.GetString();
+            }
+            if(needsRequirements.ToLower() == "y")
+            {
+                int maxOccupancy = 0;
+                bool isAccessible = false;
+                int rvLength = 0;
+                bool utilities = false;
+
+                Console.WriteLine("How many people are you expecting?");
+                maxOccupancy = cliHelper.GetInteger();
+                while(maxOccupancy <= 0)
+                {
+                    Console.WriteLine("Invalid option. Please try again");
+                    maxOccupancy = cliHelper.GetInteger();
+                }
+                reservations = reservations.Where(r => r.MaxOccupancy <= maxOccupancy).ToList();
+
+                Console.WriteLine("Do you require wheelchair accessibility? (true/false)");
+                isAccessible = cliHelper.GetBool();
+                reservations = reservations.Where(r => r.Accessible == isAccessible).ToList();
+
+                Console.WriteLine("What is the length of your RV? Press 0 if you don't have an RV.");
+                rvLength = cliHelper.GetInteger();
+                while (rvLength < 0)
+                {
+                    Console.WriteLine("Invalid option. Please try again");
+                    rvLength = cliHelper.GetInteger();
+                }
+                reservations = reservations.Where(r => r.MaxRvLenth <= rvLength).ToList();
+
+                Console.WriteLine("Do you require a utility setup? (true/false)");
+                utilities = cliHelper.GetBool();
+                reservations = reservations.Where(r => r.Utilities == utilities).ToList();
             }
             return reservations;
         }
@@ -190,7 +237,7 @@ namespace Capstone
             Console.WriteLine("ID".PadRight(6) + "Name".PadRight(35) + "Open".PadRight(15) + "Close".PadRight(15) + "Daily Fee".PadRight(15));
             foreach (Campground campground in campgrounds)
             {
-				Console.WriteLine("#" + campground.CampgroundId.ToString().PadRight(5) + campground.Name.PadRight(35) + campground.OpeningMonth.ToString().PadRight(15) + campground.ClosingMonth.ToString().PadRight(15) + campground.DailyFee.ToString("C").PadRight(15));
+				Console.WriteLine("#" + campground.CampgroundId.ToString().PadRight(5) + campground.Name.PadRight(35) + DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(campground.OpeningMonth).ToString().PadRight(15) + DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(campground.ClosingMonth).ToString().PadRight(15) + campground.DailyFee.ToString("C").PadRight(15));
                 counter++;
             }
 			Console.WriteLine();
