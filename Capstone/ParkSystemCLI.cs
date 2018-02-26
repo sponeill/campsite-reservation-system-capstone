@@ -167,6 +167,7 @@ namespace Capstone
         private List<AvailableReservations> GetAdditionalRequirements(List<AvailableReservations> reservations)
         {
             string needsRequirements = "";
+			Console.WriteLine();
             Console.WriteLine("Do you have any additional requirements? (Y/N)");
             needsRequirements = cliHelper.GetString();
             while(needsRequirements.ToLower() != "y" && needsRequirements.ToLower() != "n")
@@ -181,20 +182,23 @@ namespace Capstone
                 int rvLength = 0;
                 bool utilities = false;
 
-                Console.WriteLine("How many people are you expecting?");
+				Console.WriteLine();
+				Console.WriteLine("How many people are you expecting?");
                 maxOccupancy = cliHelper.GetInteger();
                 while(maxOccupancy <= 0)
                 {
                     Console.WriteLine("Invalid option. Please try again");
                     maxOccupancy = cliHelper.GetInteger();
                 }
-                reservations = reservations.Where(r => r.MaxOccupancy <= maxOccupancy).ToList();
+                reservations = reservations.Where(r => r.MaxOccupancy >= maxOccupancy).ToList();
 
-                Console.WriteLine("Do you require wheelchair accessibility? (true/false)");
+				Console.WriteLine();
+				Console.WriteLine("Do you require wheelchair accessibility? (True/False)");
                 isAccessible = cliHelper.GetBool();
                 reservations = reservations.Where(r => r.Accessible == isAccessible).ToList();
 
-                Console.WriteLine("What is the length of your RV? Press 0 if you don't have an RV.");
+				Console.WriteLine();
+				Console.WriteLine("What is the length of your RV? Press 0 if you don't have an RV.");
                 rvLength = cliHelper.GetInteger();
                 while (rvLength < 0)
                 {
@@ -203,7 +207,8 @@ namespace Capstone
                 }
                 reservations = reservations.Where(r => r.MaxRvLenth <= rvLength).ToList();
 
-                Console.WriteLine("Do you require a utility setup? (true/false)");
+				Console.WriteLine();
+				Console.WriteLine("Do you require a utility setup? (True/False)");
                 utilities = cliHelper.GetBool();
                 reservations = reservations.Where(r => r.Utilities == utilities).ToList();
             }
