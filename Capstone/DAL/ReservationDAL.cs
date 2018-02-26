@@ -176,5 +176,56 @@ namespace Capstone.DAL
 
 			return reservations;
 		}
+
+		public List<AvailableReservations> GetAllReservationsUnlimted(int parkId, int campgroundId, DateTime startDate, DateTime endDate)
+		{
+			List<AvailableReservations> reservations = new List<AvailableReservations>();
+			try
+			{
+				using (SqlConnection conn = new SqlConnection(connectionString))
+				{
+					conn.Open();
+
+					SqlCommand cmd = new SqlCommand("SELECT site.site_number, site.max_occupancy, site.accessible, site.max_rv_length, site.utilities, campground.daily_fee FROM campground "
+					+ "LEFT JOIN site ON campground.campground_id = site.campground_id "
+					+ "WHERE site.site_id NOT IN(SELECT reservation.site_id FROM reservation "
+					+ "WHERE(@startDate >= reservation.from_date OR @startDate <= reservation.to_date) "
+					+ "AND(@endDate >= reservation.from_date OR @endDate <= reservation.to_date) "
+					+ "AND(reservation.from_date >= @startDate) "
+					+ "AND(reservation.to_date <= @endDate)) "
+					+ "AND(MONTH(@startDate) >= campground.open_from_mm AND(MONTH(@startDate)) <= campground.open_to_mm) "
+					+ "AND((MONTH(@endDate)) >= campground.open_from_mm AND(MONTH(@endDate)) <= campground.open_to_mm) "
+					+ "AND campground.campground_id = @campgroundId", conn);
+
+					cmd.Parameters.AddWithValue("@campgroundId", campgroundId);
+					cmd.Parameters.AddWithValue("@startDate", startDate.Date);
+					cmd.Parameters.AddWithValue("@endDate", endDate.Date);
+
+					SqlDataReader reader = cmd.ExecuteReader();
+
+					while (reader.Read())
+					{
+						AvailableReservations availableReservations = new AvailableReservations();
+						availableReservations.Accessible = Convert.ToBoolean(reader["accessible"]);
+						availableReservations.Cost = Convert.ToDecimal(reader["daily_fee"]);
+						availableReservations.MaxOccupancy = Convert.ToInt32(reader["max_occupancy"]);
+						availableReservations.MaxRvLenth = Convert.ToInt32(reader["max_rv_length"]);
+						availableReservations.SiteNumber = Convert.ToInt32(reader["site_number"]);
+						availableReservations.Utilities = Convert.ToBoolean(reader["utilities"]);
+
+						reservations.Add(availableReservations);
+					}
+				}
+			}
+			catch (SqlException ex)
+			{
+				Console.WriteLine("Error getting parks: " + ex.Message);
+			}
+			catch (NullReferenceException nullEx)
+			{
+				Console.WriteLine(nullEx.Message);
+			}
+			return reservations;
+		}
 	}
 }

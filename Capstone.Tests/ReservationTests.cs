@@ -75,7 +75,7 @@ namespace Capstone.Tests
 
 
 					//Act
-					List<AvailableReservations> availableSites = testClass.GetAllReservations(1, 1, DateTime.Today, DateTime.Today);
+					List<AvailableReservations> availableSites = testClass.GetAllReservationsUnlimted(1, 1, DateTime.Today, DateTime.Today);
 					int expectedSiteCount = GetCorrectSiteCount(1, 1, DateTime.Today, DateTime.Today);
 
 
