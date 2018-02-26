@@ -72,8 +72,12 @@ namespace Capstone
                         {
                             campgrounds = PrintAllCampgrounds(parks[userInput - 1].ParkId);
                             Console.WriteLine("Which campground (enter 0 to cancel)? ");
-
+                            
                             campgroundInput = cliHelper.GetInteger();
+                            if(campgroundInput == 0)
+                            {
+                                RunCLI();
+                            }
                             while(campgroundInput < 0 || !campgrounds.Exists(c => c.CampgroundId == campgroundInput))
                             {
                                 Console.WriteLine("Invalid option. Please try again.");
@@ -212,8 +216,13 @@ namespace Capstone
             string reservationName = "";
 			Console.WriteLine();
             Console.WriteLine("Which site would you like to reserve (enter 0 to cancel)?");
+            
             siteToReserve = cliHelper.GetInteger();
-            while(!reservations.Exists(s => s.SiteNumber == siteToReserve))
+            if (siteToReserve == 0)
+            {
+                RunCLI();
+            }
+            while (!reservations.Exists(s => s.SiteNumber == siteToReserve))
             {
                 Console.WriteLine("Invalid option. Please try again.");
                 siteToReserve = cliHelper.GetInteger();

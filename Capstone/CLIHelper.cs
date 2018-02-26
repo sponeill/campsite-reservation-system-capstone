@@ -52,6 +52,7 @@ namespace Capstone
         }
 
 
+
         public static double GetDouble(string message)
         {
             string userInput = String.Empty;
